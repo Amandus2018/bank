@@ -26,7 +26,7 @@ public class AccountService {
     }
 
     private String createRandomAccountNumber() {
-    //  Creates random account number between EE1000 -  EE9999
+        //  Creates random account number between EE1000 -  EE9999
         Random random = new Random();
         return "EE" + (random.nextInt(9999) + 1000);
     }
@@ -55,7 +55,7 @@ public class AccountService {
     }
 
     public boolean accountNumberExist(List<AccountDto> accounts, String receiverAccountNumber) {
-        for (AccountDto account : accounts){
+        for (AccountDto account : accounts) {
             if (account.getAccountNumber().equals(receiverAccountNumber)) {
                 return true;
             }
@@ -64,7 +64,7 @@ public class AccountService {
     }
 
     public AccountDto getAccountByNumber(List<AccountDto> accounts, String receiverAccountNumber) {
-        for (AccountDto account : accounts){
+        for (AccountDto account : accounts) {
             if (account.getAccountNumber().equals(receiverAccountNumber)) {
                 return account;
             }
@@ -91,5 +91,22 @@ public class AccountService {
 
         return requestResult;
 
+    }
+
+    public RequestResult deleteAccount(List<AccountDto> accounts, int accountId) {
+        RequestResult requestResult = new RequestResult();
+
+        if (!accountIdExist(accounts, accountId)) {
+            requestResult.setError("Account ID: " + accountId + " does not exist!");
+            requestResult.setAccountId(accountId);
+            return requestResult;
+        }
+
+        AccountDto account = getAccountById(accounts, accountId);
+        accounts.remove(account);
+
+        requestResult.setMessage("Account deleted");
+        requestResult.setAccountId(accountId);
+        return requestResult;
     }
 }

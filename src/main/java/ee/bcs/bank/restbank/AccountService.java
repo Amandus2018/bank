@@ -109,4 +109,31 @@ public class AccountService {
         requestResult.setAccountId(accountId);
         return requestResult;
     }
+
+
+    public RequestResult updateLockStatus(List<AccountDto> accounts, int accountId) {
+        RequestResult requestResult = new RequestResult();
+
+        if (!accountIdExist(accounts, accountId)) {
+            requestResult.setError("Account ID: " + accountId + " does not exist!");
+            requestResult.setAccountId(accountId);
+            return requestResult;
+        }
+        AccountDto account = getAccountById(accounts, accountId);
+
+//        Kui lukus siis tee lahti
+        if (account.getLocked()) {
+            account.setLocked(false);
+//            Sõnumisse Id lukust lahti
+            requestResult.setAccountId(accountId);
+            requestResult.setMessage("Account Unlocked");
+            return requestResult;
+        }
+//        Kui eelmist if ei läbinud, siis lukku
+        account.setLocked(true);
+        requestResult.setAccountId(accountId);
+        requestResult.setMessage("Account Locked");
+        return requestResult;
+
+    }
 }
